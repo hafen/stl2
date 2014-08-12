@@ -38,7 +38,7 @@ stl2(x, t = NULL, n.p, s.window, s.degree = 1,
    \item{sub.labels}{optional vector of length n.p that contains the labels of the subseries in their natural order (such as month name, day of week, etc.), used for strip labels when plotting.  All entries must be unique.}
    \item{sub.start}{which element of sub.labels does the series begin with.  See details.}
    \item{details}{if \code{TRUE}, returns a list of the results of all the intermediate iterations.}
-   \item{s.jump, t.jump, l.jump, fc.jump}{integers at least one to increase speed of the respective smoother.  Linear interpolation happens between every \code{*.jump}th value.}
+   \item{s.jump, t.jump, l.jump, fc.jump}{integers at least one to increase speed of the respective smoother.  Cubic interpolation happens between every \code{*.jump}th value.}
    \item{s.blend, t.blend, l.blend, fc.blend}{vectors of proportion of blending to degree 0 polynomials at the endpoints of the series.}
    \item{...}{}
 }
