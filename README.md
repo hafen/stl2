@@ -1,4 +1,4 @@
-# STL2: Seasonal Trend Decomposition using Loess
+# STL3: Seasonal Trend Decomposition using Loess
 
 This package contains enhancements to the `stl` implementation that comes with base R.  Ryan is making it public here.
 
@@ -27,7 +27,7 @@ library(devtools)
 #Ryan's version
 install_github("stl2", "hafen") 
 #Xiaosu's version
-install_github("XiaosuTong/stl2")
+install_github("XiaosuTong/stl3")
 ```
 
 ## License
