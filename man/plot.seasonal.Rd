@@ -1,6 +1,6 @@
 \name{plot.seasonal}
 \alias{plot.seasonal}
-\title{Seasonal Diagnostic Plot for an stl2 Object}
+\title{Seasonal Diagnostic Plot for an stl3 Object}
 \description{
 Plots each cycle-subseries of the detrended data (or equivalently, 
 seasonal plus remainder), with the mean subtracted.  The fitted seasonal 
@@ -11,7 +11,7 @@ plot.seasonal(x, col = c("black", "red"), lwd = 2, xlab = "Time",
     ylab = "Centered Seasonal + Remainder", ...)
 }
 \arguments{
-  \item{x}{object of class \code{"stl2"}.}
+  \item{x}{object of class \code{"stl3"}.}
   \item{col, lwd, xlab, ylab, ...}{parameters to be passed to \code{xyplot()}.}
 }
 \details{
@@ -27,7 +27,7 @@ R. B. Cleveland, W. S. Cleveland, J.E.  McRae, and I. Terpenning (1990) STL:  A 
 % \note{ ~~further notes~~ 
 %  ~Make other sections like Warning with \section{Warning }{....} ~
 % }
-\seealso{\code{\link{stl2}}}
+\seealso{\code{\link{stl3}}}
 % \examples{
 % ##---- Should be DIRECTLY executable !! ----
 % ##-- ==>  Define data, use random,

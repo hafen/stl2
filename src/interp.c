@@ -7,9 +7,9 @@
 # // NN is length of x
 # 
 
-void stl2_interp(int *x_l, double *f_x, double *f_x_p, int *nn, int *x, int *NN, double *y);
+void stl3_interp(int *x_l, double *f_x, double *f_x_p, int *nn, int *x, int *NN, double *y);
 
-void stl2_interp(int *x_l, double *f_x, double *f_x_p, int *nn, int *x, int *NN, double *y)
+void stl3_interp(int *x_l, double *f_x, double *f_x_p, int *nn, int *x, int *NN, double *y)
 {
    int i, j, n, N;
    double u, h;

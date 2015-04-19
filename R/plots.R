@@ -1,7 +1,7 @@
-plot.stl2 <- function(x, scales=list(y=list(relation="sliced")), type="l", as.table=TRUE, strip=FALSE, strip.left=TRUE, between=list(y=0.5), layout=NULL, ...) {
+plot.stl3 <- function(x, scales=list(y=list(relation="sliced")), type="l", as.table=TRUE, strip=FALSE, strip.left=TRUE, between=list(y=0.5), layout=NULL, ...) {
 
    if(x$pars$fc.number == 0) {
-      d <- data.frame(time=rep(time.stl2(x), 4), values=c(getraw(x), seasonal(x), trend(x), remainder(x)), ind=factor(rep(c(1:4), each=x$n)))
+      d <- data.frame(time=rep(time.stl3(x), 4), values=c(getraw(x), seasonal(x), trend(x), remainder(x)), ind=factor(rep(c(1:4), each=x$n)))
       levels(d$ind) <- c("raw", "seasonal", "trend", "remainder")
       d$which <- "isnotNA"
       
@@ -13,7 +13,7 @@ plot.stl2 <- function(x, scales=list(y=list(relation="sliced")), type="l", as.ta
          d$values[d$ind=="seasonal" & is.na(getraw(x))] <- NA
          d$values[d$ind=="trend" & is.na(getraw(x))] <- NA
          d <- rbind(d, 
-            data.frame(time=rep(time.stl2(x), 2), values=c(seasonal(x), trend(x)), ind=rep(c("seasonal", "trend"), each=x$n), which="isxNA")
+            data.frame(time=rep(time.stl3(x), 2), values=c(seasonal(x), trend(x)), ind=rep(c("seasonal", "trend"), each=x$n), which="isxNA")
          )
          d$values[d$ind=="seasonal" & d$which=="isxNA" & !is.na(getraw(x))] <- NA
          d$values[d$ind=="trend" & d$which=="isxNA" & !is.na(getraw(x))] <- NA      
@@ -29,7 +29,7 @@ plot.stl2 <- function(x, scales=list(y=list(relation="sliced")), type="l", as.ta
          fcdat <- stack(x$fc[,1:fc.number])$values
       }
       
-      d <- data.frame(time=rep(time.stl2(x), nvar), values=c(getraw(x), seasonal(x), fcdat, remainder(x)), ind=factor(rep(c(1:nvar), each=x$n)))
+      d <- data.frame(time=rep(time.stl3(x), nvar), values=c(getraw(x), seasonal(x), fcdat, remainder(x)), ind=factor(rep(c(1:nvar), each=x$n)))
       levels(d$ind) <- c("raw", "seasonal", fc.name, "remainder")
       d$which <- "isnotNA"
       
@@ -43,7 +43,7 @@ plot.stl2 <- function(x, scales=list(y=list(relation="sliced")), type="l", as.ta
             d$values[d$ind==fc.name[i] & is.na(getraw(x))] <- NA
          }
          d <- rbind(d, 
-            data.frame(time=rep(time.stl2(x), fc.number + 1), values=c(seasonal(x), fcdat), ind=rep(c("seasonal", fc.name), each=x$n), which="isxNA")
+            data.frame(time=rep(time.stl3(x), fc.number + 1), values=c(seasonal(x), fcdat), ind=rep(c("seasonal", fc.name), each=x$n), which="isxNA")
          )
          d$values[d$ind=="seasonal" & d$which=="isxNA" & !is.na(getraw(x))] <- NA
          for(i in 1:fc.number) {
@@ -78,7 +78,7 @@ plot.cycle <- function(x, layout=c(x$pars$n.p, 1), col="#0080ff", xlab="Time", y
 }, ...) {
 
    seas <- seasonal(x)
-   t <- time.stl2(x)
+   t <- time.stl3(x)
 
    cycleSubIndices <- x$data$sub.labels
 
@@ -108,7 +108,7 @@ plot.cycle <- function(x, layout=c(x$pars$n.p, 1), col="#0080ff", xlab="Time", y
 
 plot.seasonal <- function(x, col=c("darkgray", "black"), lwd=2, xlab="Time", ylab="Centered Seasonal + Remainder", ...) {
    
-   dat <- by(data.frame(v1=seasonal(x) + remainder(x), v2=seasonal(x), t=time.stl2(x), v3=x$data$sub.labels), list(x$data$sub.labels), function(dd) {
+   dat <- by(data.frame(v1=seasonal(x) + remainder(x), v2=seasonal(x), t=time.stl3(x), v3=x$data$sub.labels), list(x$data$sub.labels), function(dd) {
       mn <- mean(dd$v1, na.rm=TRUE)
       data.frame(a=dd$v1 - mn, b=dd$v2 - mn, t=dd$t, sub.labels=dd$v3)
    })
@@ -159,7 +159,7 @@ plot.seasonal <- function(x, col=c("darkgray", "black"), lwd=2, xlab="Time", yla
 
 plot.rembycycle <- function(x, col="darkgray", locol="black", lolwd=2, xlab="Time", ylab="Remainder", ...) {
 
-   vals2 <- data.frame(values=remainder(x), ind=x$data$sub.labels, t=time.stl2(x))
+   vals2 <- data.frame(values=remainder(x), ind=x$data$sub.labels, t=time.stl3(x))
 
    # vals2 <- stack(by(remainder(x), list(cycleSubIndices), identity))
    #    vals2$ind <- as.numeric(as.character(vals2$ind))
@@ -194,10 +194,10 @@ plot.rembycycle <- function(x, col="darkgray", locol="black", lolwd=2, xlab="Tim
 plot.trend <- function(x, xlab="Time", ylab="Trend", span=0.3, type=c("p", "l"), scales=list(y=list(relation="free")), lwd=c(1, 1), col=c("darkgray", "black", "darkgray"), layout=c(1, 2), between=list(y=0.5), strip=FALSE, strip.left=TRUE, as.table=TRUE, ...) {
 
    dat <- rbind(
-      data.frame(x=time.stl2(x), y=remainder(x) + trend(x), type="p", pan="Trend"),
-      data.frame(x=time.stl2(x), y=trend(x), type="l", pan="Trend"),
-      data.frame(x=time.stl2(x), y=remainder(x), type="p", pan="Remainder"),
-      data.frame(x=time.stl2(x), y=predict(loess(remainder(x) ~ c(1:length(remainder(x))), span=span, weights=x$data$weights), newdata=c(1:length(remainder(x)))), type="l", pan="Remainder")
+      data.frame(x=time.stl3(x), y=remainder(x) + trend(x), type="p", pan="Trend"),
+      data.frame(x=time.stl3(x), y=trend(x), type="l", pan="Trend"),
+      data.frame(x=time.stl3(x), y=remainder(x), type="p", pan="Remainder"),
+      data.frame(x=time.stl3(x), y=predict(loess(remainder(x) ~ c(1:length(remainder(x))), span=span, weights=x$data$weights), newdata=c(1:length(remainder(x)))), type="l", pan="Remainder")
    )
 
    p <- xyplot(y ~ x | pan,

@@ -1,11 +1,11 @@
-Package: stl2
+Package: stl3
 Type: Package
 Title: Implementation of Seasonal-Trend Decomposition using Loess (STL) in R
 Version: 1.0
-Date: 2010-02-08
-Author: Ryan Hafen <rhafen@gmail.com>
-Maintainer: Ryan Hafen <rhafen@gmail.com>
-Description: Another implementation of STL that can handle NA values, higher order loess smoothing, and has other various enhancements, with plotting methods.
+Date: 2015-04-19
+Author: Ryan Hafen <rhafen@gmail.com> Xiaosu Tong <xiaosutong@gmail.com>
+Maintainer: Ryan Hafen <rhafen@gmail.com> Xiaosu Tong <xiaosutong@gmail.com>
+Description: Another implementation of STL that can handle NA values, higher order loess smoothing, pass into a custom initial trend component, and has other various enhancements, with plotting methods.
 Depends: lattice, yaImpute
 Suggests: operator
 License: BSD

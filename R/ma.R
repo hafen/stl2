@@ -3,6 +3,6 @@
       stop("something is wrong with the specified parameters")
 
    n <- length(x)
-   out <- .C("ma", as.double(x), as.integer(n), as.integer(n.p), ans=double(n - 2*n.p), PACKAGE="stl2")
+   out <- .C("ma", as.double(x), as.integer(n), as.integer(n.p), ans=double(n - 2*n.p), PACKAGE="stl3")
    return(out$ans)
 }
