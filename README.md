@@ -24,7 +24,10 @@ For experimental inference, prediction, and variance reduction at endpoints, see
 
 ```s
 library(devtools)
-install_github("stl2", "hafen")
+#Ryan's version
+install_github("stl2", "hafen") 
+#Xiaosu's version
+install_github("XiaosuTong/stl2")
 ```
 
 ## License
