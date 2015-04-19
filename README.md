@@ -1,13 +1,17 @@
 # STL2: Seasonal Trend Decomposition using Loess
 
-This package contains enhancements to the `stl` implementation that comes with base R.  I am making it public here because I never got around to putting it on CRAN.
+This package contains enhancements to the `stl` implementation that comes with base R.  Ryan is making it public here.
 
-Here are some of the added features over `stl`:
+Here are some of the added features over `stl` done by Ryan Hafen:
 
 - Can handle NA values
 - Higher order loess smoothing (more than just local constant and linear)
 - Automated parameter choices for local quadratic
 - Plot methods for diagnostics
+
+Here are some of the features done by Xiaosu Tong:
+
+- Can pass a custom initial trend component 
 
 For experimental inference, prediction, and variance reduction at endpoints, see the [operator](http://github.com/hafen/operator) package.
 
