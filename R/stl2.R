@@ -40,6 +40,7 @@ stl2.zoo <- function(...) {
 
 stl2.default <- function(x, t=NULL, n.p, s.window, s.degree=1, t.window=NULL, t.degree=1, fc.window=NULL, fc.degree=NULL, fc.name=NULL, l.window=NULL, l.degree=t.degree, s.jump=ceiling(s.window/10), t.jump=ceiling(t.window/10), l.jump=ceiling(l.window/10), fc.jump=NULL, critfreq=0.05, s.blend=0, t.blend=0, l.blend=t.blend, fc.blend=NULL, inner=2, outer=1, sub.labels=NULL, sub.start=1, zero.weight=1e-6, details=FALSE, ...) {
 
+   print("This is the new version!!!")
    if(missing(n.p)) stop("must specify periodicity of seasonal (either explicitly or through a time series object)")
 	n.p <- as.integer(n.p)
 	
