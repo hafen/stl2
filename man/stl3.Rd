@@ -7,7 +7,7 @@
    Decompose a time series into seasonal, trend and irregular components using \code{loess}, acronym STL.  A new implementation of STL.  Allows for NA values, local quadratic smoothing,  post-trend smoothing, and endpoint blending.  The usage is very similar to that of R's built-in \code{stl()}.
 }
 \usage{
-stl3(x, t = NULL, n.p, trend = 0, s.window, s.degree = 1, 
+stl3(x, t = NULL, n.p, trend = 0, weight = 1, s.window, s.degree = 1, 
    t.window = NULL, t.degree = 1, 
    fc.window = NULL, fc.degree = NULL, fc.name = NULL, 
    l.window = NULL, l.degree = t.degree, 
@@ -24,6 +24,7 @@ stl3(x, t = NULL, n.p, trend = 0, s.window, s.degree = 1,
 	\item{t}{times at which the time series values were observed.  Not required.}
 	\item{n.p}{periodicity of the seasonal component.  In R's \code{stl} function, this is the frequency of the time series.}
 	\item{trend}{initial trend component, it can be a vector which has the same length as x, or it is vector 0.}
+	\item{weight}{initial weights which will be used for the outer loop, default is all 1.}
 	\item{s.window}{either the character string \code{"periodic"} or the span (in lags) of the loess window for seasonal extraction, which should be odd.  This has no default.}
 	\item{s.degree}{degree of locally-fitted polynomial in seasonal extraction.  Should be 0, 1, or 2.}
 	\item{t.window}{the span (in lags) of the loess window for trend extraction, which should be odd.  If \code{NULL}, the default, \code{nextodd(ceiling((1.5*period) / (1-(1.5/s.window))))}, is taken.}
