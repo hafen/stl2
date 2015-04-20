@@ -192,7 +192,7 @@ stl3.default <- function(x, trend=trend, weight=weight, t=NULL, n.p, s.window, s
    if(missing(weight)) {
       w <- rep(1, n)
    } else {
-      if(length(weight) != n) stop("initial trend component must be same length as time series")
+      if(length(weight) != n) stop("initial weights must be same length as time series")
       w <- weight
    }
 
