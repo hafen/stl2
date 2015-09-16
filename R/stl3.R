@@ -267,7 +267,7 @@ for(o_iter in 1:outer) {
       seasonal <- C[st:nd] - L
 
       # Step 5: Deseasonalize
-      D <- Y - seasonal
+      D <- Y - seasonal - fc.first - fc.second
 
       # Step 6: Trend Smoothing
 
