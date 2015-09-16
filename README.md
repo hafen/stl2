@@ -12,6 +12,7 @@ Here are some of the added features over `stl` done by Ryan Hafen:
 Here are some of the features done by Xiaosu Tong:
 
 - Can pass a custom initial trend component 
+- Can pass a custom initial fc.first and fc.second components
 
 For experimental inference, prediction, and variance reduction at endpoints, see the [operator](http://github.com/hafen/operator) package.
 
