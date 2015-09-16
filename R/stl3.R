@@ -65,6 +65,13 @@ stl3.default <- function(x, trend=trend, weight=weight, t=NULL, n.p, s.window, s
    } else {
       if(length(trend) != n) stop("initial trend component must be same length as time series")
    }
+   if(missing(fc.first) || missing(fc.second)) {
+     fc.first <- 0
+     fc.second <- 0
+   } else {
+     if(length(fc.first) != n) stop("initial fc.first component must be same length as time series")
+     if(length(fc.second) != n) stop("initial fc.second component must be same length as time series")
+   }
 	
 	wincheck <- function(x) {
       x <- nextodd(x)
@@ -201,7 +208,7 @@ for(o_iter in 1:outer) {
    for(iter in 1:inner) {
 
       # step 1: detrending...
-      Y.detrended <- Y - trend
+      Y.detrended <- Y - trend - fc.first - fc.second
       
       csLength <- ceiling(n/n.p) + 2
       
