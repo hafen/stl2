@@ -1,7 +1,7 @@
 #include <R.h>
 #include <Rmath.h>
 
-double loess_stl2( double *xx,
+double loess_stl3( double *xx,
                    double *yy,
                    int *nn, 
                    int *ddegree, 
@@ -17,7 +17,7 @@ double loess_stl2( double *xx,
                  );
 inline double my_abs(double x);
 
-double loess_stl2( double *xx,      // time values - should be 1:n unless there are some NAs
+double loess_stl3( double *xx,      // time values - should be 1:n unless there are some NAs
                    double *yy,      // the corresponding y values
                    int *nn,         // the length of x
                    int *ddegree,    // degree of smoothing

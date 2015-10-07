@@ -1,4 +1,4 @@
-.loess_stl2 <- function(x=NULL, y, span, degree, weights=NULL, m=c(1:length(y)), y_idx=!is.na(y), noNA=all(y_idx), blend=0, jump=ceiling(span/10), at=c(1:length(y))) {
+.loess_stl3 <- function(x=NULL, y, span, degree, weights=NULL, m=c(1:length(y)), y_idx=!is.na(y), noNA=all(y_idx), blend=0, jump=ceiling(span/10), at=c(1:length(y))) {
 
 	nextodd <- function(x) {
 		x <- round(x)
@@ -57,12 +57,12 @@
       # max_dist <- max_dist * (span/n)
       max_dist <- max_dist + (span-n)/2
    
-   out <- .C("loess_stl2", as.double(x[y_idx]), as.double(y[y_idx]), as.integer(n), as.integer(degree), as.integer(span), as.double(weights[y_idx]), as.integer(m), as.integer(n_m), as.integer(l_idx-1), as.integer(r_idx-1), as.double(max_dist), result=double(n_m), slopes=double(n_m), PACKAGE="stl2")
+   out <- .C("loess_stl3", as.double(x[y_idx]), as.double(y[y_idx]), as.integer(n), as.integer(degree), as.integer(span), as.double(weights[y_idx]), as.integer(m), as.integer(n_m), as.integer(l_idx-1), as.integer(r_idx-1), as.double(max_dist), result=double(n_m), slopes=double(n_m), PACKAGE="stl3")
    
    res1 <- out$result
    # do interpolation
    if(jump > 1)
-      res1 <- .stl2_interp(m, out$result, out$slope, at)
+      res1 <- .stl3_interp(m, out$result, out$slope, at)
       # res1 <- approx(x=m, y=out$result, xout=at)$y
    
    if(blend > 0 && blend <= 1 && degree >= 1) {
@@ -98,11 +98,11 @@
       # right now, a lot of unnecessary calculation is done at the interior
       # where blending doesn't matter
 
-      tmp <- .C("loess_stl2", as.double(x[y_idx]), as.double(y[y_idx]), as.integer(n), as.integer(0), as.integer(sp0), as.double(weights[y_idx]), as.integer(m2), as.integer(n_m2), as.integer(l_idx2-1), as.integer(r_idx2-1), as.double(max_dist2), result=double(n_m2), slopes=double(n_m2), PACKAGE="stl2")
+      tmp <- .C("loess_stl3", as.double(x[y_idx]), as.double(y[y_idx]), as.integer(n), as.integer(0), as.integer(sp0), as.double(weights[y_idx]), as.integer(m2), as.integer(n_m2), as.integer(l_idx2-1), as.integer(r_idx2-1), as.double(max_dist2), result=double(n_m2), slopes=double(n_m2), PACKAGE="stl3")
       
       if(jump > 1) {
-         res2_left <- .stl2_interp(left, head(tmp$result, length(left)), head(tmp$slope, length(left)), left_interp)
-         res2_right <- .stl2_interp(right, tail(tmp$result, length(right)), tail(tmp$slope, length(right)), right_interp)
+         res2_left <- .stl3_interp(left, head(tmp$result, length(left)), head(tmp$slope, length(left)), left_interp)
+         res2_right <- .stl3_interp(right, tail(tmp$result, length(right)), tail(tmp$slope, length(right)), right_interp)
       } else {
          res2_left <- head(tmp$result, length(left))
          res2_right <- tail(tmp$result, length(right))

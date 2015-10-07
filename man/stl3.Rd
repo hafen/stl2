@@ -1,13 +1,13 @@
-\name{stl2}
-\alias{stl2}
-\alias{stl2.default}
-\alias{stl2.ts}
+\name{stl3}
+\alias{stl3}
+\alias{stl3.default}
+\alias{stl3.ts}
 \title{Seasonal Decomposition of Time Series by Loess}
 \description{
    Decompose a time series into seasonal, trend and irregular components using \code{loess}, acronym STL.  A new implementation of STL.  Allows for NA values, local quadratic smoothing,  post-trend smoothing, and endpoint blending.  The usage is very similar to that of R's built-in \code{stl()}.
 }
 \usage{
-stl2(x, t = NULL, n.p, s.window, s.degree = 1, 
+stl3(x, t = NULL, n.p, trend = 0, fc.first=0, fc.second=0,  weight = 1, s.window, s.degree = 1, 
    t.window = NULL, t.degree = 1, 
    fc.window = NULL, fc.degree = NULL, fc.name = NULL, 
    l.window = NULL, l.degree = t.degree, 
@@ -23,6 +23,10 @@ stl2(x, t = NULL, n.p, s.window, s.degree = 1,
   	\item{x}{vector of time series values, in order of time.  If \code{x} is a time series object, then \code{t} and \code{n.p} do not need to be specified, although they still can be.}
 	\item{t}{times at which the time series values were observed.  Not required.}
 	\item{n.p}{periodicity of the seasonal component.  In R's \code{stl} function, this is the frequency of the time series.}
+	\item{trend}{initial trend component, it can be a vector which has the same length as x, or it is vector 0.}
+	\item{fc.first}{initial first fc component, it can be a vector which has the same length as x, or it is vector 0.}
+	\item{fc.second}{initial second fc component, it can be a vector which has the same length as x, or it is vector 0.}
+	\item{weight}{initial weights which will be used for the outer loop, default is all 1.}
 	\item{s.window}{either the character string \code{"periodic"} or the span (in lags) of the loess window for seasonal extraction, which should be odd.  This has no default.}
 	\item{s.degree}{degree of locally-fitted polynomial in seasonal extraction.  Should be 0, 1, or 2.}
 	\item{t.window}{the span (in lags) of the loess window for trend extraction, which should be odd.  If \code{NULL}, the default, \code{nextodd(ceiling((1.5*period) / (1-(1.5/s.window))))}, is taken.}
@@ -38,7 +42,7 @@ stl2(x, t = NULL, n.p, s.window, s.degree = 1,
    \item{sub.labels}{optional vector of length n.p that contains the labels of the subseries in their natural order (such as month name, day of week, etc.), used for strip labels when plotting.  All entries must be unique.}
    \item{sub.start}{which element of sub.labels does the series begin with.  See details.}
    \item{details}{if \code{TRUE}, returns a list of the results of all the intermediate iterations.}
-   \item{s.jump, t.jump, l.jump, fc.jump}{integers at least one to increase speed of the respective smoother.  Linear interpolation happens between every \code{*.jump}th value.}
+   \item{s.jump, t.jump, l.jump, fc.jump}{integers at least one to increase speed of the respective smoother.  Cubic interpolation happens between every \code{*.jump}th value.}
    \item{s.blend, t.blend, l.blend, fc.blend}{vectors of proportion of blending to degree 0 polynomials at the endpoints of the series.}
    \item{...}{}
 }
@@ -55,7 +59,7 @@ residuals from the seasonal plus trend fit.
 Cycle-subseries labels are useful for plotting and can be specified through the sub.labels argument.  Here is an example for how the sub.labels and sub.start parameters might be set for one situation.  Suppose we have a daily series with n.p=7 (fitting a day-of-week component).  Here, sub.labels could be set to c("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat").  Now, if the series starts with a Wednesday value, then one would specify sub.labels=4, since Wednesday is the fourth element of sub.labels.  This ensures that the labels in the plots to start the plotting with Sunday cycle-subseries instead of Wednesday.
 }
 \value{
-   returns an object of class \code{"stl2"}, containing
+   returns an object of class \code{"stl3"}, containing
    \item{data}{data frame containing all of the components: \code{raw}, \code{seasonal}, \code{trend}, \code{remainder}, \code{weights}.}
    \item{pars}{list of parameters used in the procedure.}
    \item{fc.number}{number of post-trend frequency components fitted.}
@@ -70,11 +74,11 @@ R. B. Cleveland, W. S. Cleveland, J. E.  McRae, and I. Terpenning (1990) STL:  A
 \author{Ryan Hafen}
 \note{
    This is a complete re-implementation of the STL algorithm, with the loess part in C and the rest in R.  Moving a lot of the code to R makes it easier to experiment with the method at a very minimal speed cost.  Recoding in C instead of using R's built-in loess results in better performance, especially for larger series.}
-\seealso{\code{\link{plot.stl2}} for plotting the components.
+\seealso{\code{\link{plot.stl3}} for plotting the components.
 
 \code{\link{getraw}}, \code{\link{seasonal}}, \code{\link{trend}}, \code{\link{remainder}} for accessing the components.}
 \examples{
-co2.stl <- stl2(co2, t=as.vector(time(co2)), n.p=12, 
+co2.stl <- stl3(co2, t=as.vector(time(co2)), n.p=12, 
    l.window=13, t.window=19, s.window=35, s.degree=1, 
    sub.labels=substr(month.name, 1, 3))
 
@@ -86,7 +90,7 @@ plot.rembycycle(co2.stl)
 
 # post-trend smoothing
 
-co2.stl_pt <- stl2(co2, t=as.vector(time(co2)), n.p=12, 
+co2.stl_pt <- stl3(co2, t=as.vector(time(co2)), n.p=12, 
    l.window=13, t.window=19, s.window=35, s.degree=1, 
    sub.labels=substr(month.name, 1, 3), 
    fc.degree=c(1, 2), fc.window=c(201, 35), 
@@ -101,7 +105,7 @@ plot(co2.stl_pt, scales=list(y=list(relation="free")),
 y <- co2
 y[201:224] <- NA
 
-y.stl <- stl2(y, l.window=13, t.window=19, s.window=35, 
+y.stl <- stl3(y, l.window=13, t.window=19, s.window=35, 
    s.degree=1, sub.labels=substr(month.name, 1, 3))
 
 plot(y.stl, ylab="CO2 Concentration (ppm)", xlab="Time (years)")
@@ -111,7 +115,7 @@ plot.cycle(y.stl)
 plot.rembycycle(y.stl)
 
 # if you don't want to use a time series object:
-y.stl <- stl2(y, t=as.vector(time(y)), n.p=12, 
+y.stl <- stl3(y, t=as.vector(time(y)), n.p=12, 
    l.window=13, t.window=19, s.window=35, s.degree=1, 
    sub.labels=substr(month.name, 1, 3))
 
@@ -120,7 +124,7 @@ y.stl <- stl2(y, t=as.vector(time(y)), n.p=12,
 y2 <- co2
 y2[200] <- 300
 
-y2.stl <- stl2(y2, t=as.vector(time(y2)), n.p=12, 
+y2.stl <- stl3(y2, t=as.vector(time(y2)), n.p=12, 
    l.window=13, t.window=19, s.window=35, s.degree=1, 
    sub.labels=substr(month.name, 1, 3), outer=10)
 
@@ -132,7 +136,7 @@ plot.rembycycle(y2.stl)
 
 # compare to R's stl
 
-x1 <- stl2(co2, t=as.vector(time(co2)), n.p=12, 
+x1 <- stl3(co2, t=as.vector(time(co2)), n.p=12, 
    l.window=13, t.window=19, s.window=11, s.degree=1, 
    sub.labels=substr(month.name, 1, 3))
 
@@ -142,7 +146,7 @@ x2 <- stl(co2, l.window=13, t.window=19, s.window=11, s.degree=1)
 plot(seasonal(x1) - seasonal(x2))
 
 # but not if all jump parameters are 1
-x1 <- stl2(co2, t=as.vector(time(co2)), n.p=12, 
+x1 <- stl3(co2, t=as.vector(time(co2)), n.p=12, 
    l.window=13, t.window=19, s.window=11, s.degree=1, 
    sub.labels=substr(month.name, 1, 3), 
    s.jump=1, t.jump=1, l.jump=1)

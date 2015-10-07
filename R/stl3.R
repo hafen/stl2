@@ -12,9 +12,9 @@
 # outer <- 1; inner <- 1; details <- TRUE; robust <- FALSE
 # l.degree <- t.degree
 
-stl2 <- function(x, t=NULL, n.p, s.window, s.degree=1, t.window=NULL, t.degree=1, fc.window=NULL, fc.degree=NULL, fc.name=NULL, l.window=NULL, l.degree=t.degree, s.jump=ceiling(s.window/10), t.jump=ceiling(t.window/10), l.jump=ceiling(l.window/10), fc.jump=NULL, critfreq=0.05, s.blend=0, t.blend=0, l.blend=t.blend, fc.blend=NULL, inner=2, outer=1, sub.labels=NULL, sub.start=1, zero.weight=1e-6, details=FALSE, ...) UseMethod("stl2")
+stl3 <- function(x, t=NULL, n.p, trend=0, fc.first=0, fc.second=0, weight=1, s.window, s.degree=1, t.window=NULL, t.degree=1, fc.window=NULL, fc.degree=NULL, fc.name=NULL, l.window=NULL, l.degree=t.degree, s.jump=ceiling(s.window/10), t.jump=ceiling(t.window/10), l.jump=ceiling(l.window/10), fc.jump=NULL, critfreq=0.05, s.blend=0, t.blend=0, l.blend=t.blend, fc.blend=NULL, inner=2, outer=1, sub.labels=NULL, sub.start=1, zero.weight=1e-6, details=FALSE, ...) UseMethod("stl3")
 
-stl2.ts <- function(x, t=as.numeric(time(x)), n.p=frequency(x), s.window, s.degree=1, t.window=NULL, t.degree=1, fc.window=NULL, fc.degree=NULL, fc.name=NULL, l.window=NULL, l.degree=t.degree, s.jump=ceiling(s.window/10), t.jump=ceiling(t.window/10), l.jump=ceiling(l.window/10), fc.jump=NULL, critfreq=0.05, s.blend=0, t.blend=0, l.blend=t.blend, fc.blend=NULL, inner=2, outer=1, sub.labels=NULL, sub.start=1, zero.weight=1e-6, details=FALSE, ...) {
+stl3.ts <- function(x, trend, fc.first, fc.second, weight, t=as.numeric(time(x)), n.p=frequency(x), s.window, s.degree=1, t.window=NULL, t.degree=1, fc.window=NULL, fc.degree=NULL, fc.name=NULL, l.window=NULL, l.degree=t.degree, s.jump=ceiling(s.window/10), t.jump=ceiling(t.window/10), l.jump=ceiling(l.window/10), fc.jump=NULL, critfreq=0.05, s.blend=0, t.blend=0, l.blend=t.blend, fc.blend=NULL, inner=2, outer=1, sub.labels=NULL, sub.start=1, zero.weight=1e-6, details=FALSE, ...) {
 
    if (is.matrix(x)) 
        stop("only univariate series are allowed")
@@ -28,17 +28,19 @@ stl2.ts <- function(x, t=as.numeric(time(x)), n.p=frequency(x), s.window, s.degr
       t <- as.vector(time(x))
    }
 
-   stl2.default(x, t=t, n.p=n.p, s.window=s.window, s.degree=s.degree, t.window=t.window, t.degree=t.degree, fc.window=fc.window, fc.degree=fc.degree, fc.name=fc.name, l.window=l.window, l.degree=l.degree, s.jump=s.jump, t.jump=t.jump, l.jump=l.jump, fc.jump=fc.jump, critfreq=0.05, s.blend=s.blend, t.blend=t.blend, l.blend=l.blend, fc.blend=NULL, inner=inner, outer=outer, sub.labels=sub.labels, sub.start=sub.start, details=details, ...)
+   stl3.default(x, trend=trend, t=t, n.p=n.p, fc.first=fc.first, fc.second=fc.second, weight=weight, s.window=s.window, s.degree=s.degree, t.window=t.window, t.degree=t.degree, fc.window=fc.window, fc.degree=fc.degree, fc.name=fc.name, l.window=l.window, l.degree=l.degree, s.jump=s.jump, t.jump=t.jump, l.jump=l.jump, fc.jump=fc.jump, critfreq=0.05, s.blend=s.blend, t.blend=t.blend, l.blend=l.blend, fc.blend=NULL, inner=inner, outer=outer, sub.labels=sub.labels, sub.start=sub.start, details=details, ...)
 }
 
 
-stl2.zoo <- function(...) {
-   stl2.ts(...)
+stl3.zoo <- function(...) {
+   stl3.ts(...)
 }
 
 
 
-stl2.default <- function(x, t=NULL, n.p, s.window, s.degree=1, t.window=NULL, t.degree=1, fc.window=NULL, fc.degree=NULL, fc.name=NULL, l.window=NULL, l.degree=t.degree, s.jump=ceiling(s.window/10), t.jump=ceiling(t.window/10), l.jump=ceiling(l.window/10), fc.jump=NULL, critfreq=0.05, s.blend=0, t.blend=0, l.blend=t.blend, fc.blend=NULL, inner=2, outer=1, sub.labels=NULL, sub.start=1, zero.weight=1e-6, details=FALSE, ...) {
+stl3.default <- function(x, trend, weight, fc.first, fc.second, t=NULL, n.p, s.window, s.degree=1, t.window=NULL, t.degree=1, fc.window=NULL, fc.degree=NULL, fc.name=NULL, l.window=NULL, l.degree=t.degree, s.jump=ceiling(s.window/10), t.jump=ceiling(t.window/10), l.jump=ceiling(l.window/10), fc.jump=NULL, critfreq=0.05, s.blend=0, t.blend=0, l.blend=t.blend, fc.blend=NULL, inner=2, outer=1, sub.labels=NULL, sub.start=1, zero.weight=1e-6, details=FALSE, ...) {
+
+   print("This is the new version!!!")
 
    if(missing(n.p)) stop("must specify periodicity of seasonal (either explicitly or through a time series object)")
 	n.p <- as.integer(n.p)
@@ -58,6 +60,18 @@ stl2.default <- function(x, t=NULL, n.p, s.window, s.degree=1, t.window=NULL, t.
 		as.integer(x2)
 	}
 	
+   if(missing(trend)) {
+      trend <- 0
+   } else {
+      if(length(trend) != n) stop("initial trend component must be same length as time series")
+   }
+   if(missing(fc.first) || missing(fc.second)) {
+     fc.first <- 0
+     fc.second <- 0
+   } else {
+     if(length(fc.first) != n) stop("initial fc.first component must be same length as time series")
+     if(length(fc.second) != n) stop("initial fc.second component must be same length as time series")
+   }
 	
 	wincheck <- function(x) {
       x <- nextodd(x)
@@ -114,7 +128,7 @@ stl2.default <- function(x, t=NULL, n.p, s.window, s.degree=1, t.window=NULL, t.
          if(tail(cs.ev, 1) != nn) cs.ev <- c(cs.ev, nn)
          cs.ev <- c(0, cs.ev, nn + 1)
          # print(m)
-         a <- .loess_stl2(y=d$y, span=s.window, degree=s.degree, weights=d$w, m=cs.ev, noNA=noNA, jump=s.jump, at=c(1:(nn+2)))		   
+         a <- .loess_stl3(y=d$y, span=s.window, degree=s.degree, weights=d$w, m=cs.ev, noNA=noNA, jump=s.jump, at=c(1:(nn+2)))		   
 		}
       c(a, rep(NA, csLength - nn - 2))
    }
@@ -165,7 +179,7 @@ stl2.default <- function(x, t=NULL, n.p, s.window, s.degree=1, t.window=NULL, t.
    # cat(s.window, " ", t.window, " ", l.window, "\n")
 
    # Trend vector - initialize to 0 or NA, depending on what's in Y
-   trend <- 0
+   ##trend <- 0!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
    # start and end indices for after adding in extra n.p before and after
    st <- n.p + 1
@@ -180,15 +194,21 @@ stl2.default <- function(x, t=NULL, n.p, s.window, s.degree=1, t.window=NULL, t.
    C <- rep(NA, n + 2*n.p)
 
    dtls <- NULL
-
-   w <- rep(1, n)
+   
+   # initial weights are all 1
+   if(missing(weight)) {
+      w <- rep(1, n)
+   } else {
+      if(length(weight) != n) stop("initial weights must be same length as time series")
+      w <- weight
+   }
 
 for(o_iter in 1:outer) {
 
    for(iter in 1:inner) {
 
       # step 1: detrending...
-      Y.detrended <- Y - trend
+      Y.detrended <- Y - trend - fc.first - fc.second
       
       csLength <- ceiling(n/n.p) + 2
       
@@ -227,7 +247,7 @@ for(o_iter in 1:outer) {
             cs.ev <- seq(1, cycleSub.length, by=s.jump)
             if(tail(cs.ev, 1) != cycleSub.length) cs.ev <- c(cs.ev, cycleSub.length)
             cs.ev <- c(0, cs.ev, cycleSub.length + 1)
-            tmps <- .loess_stl2(y=cycleSub, span=s.window, degree=s.degree, m=cs.ev, weights=w[cycleSubIndices == i], blend=s.blend, jump=s.jump,  at=c(0:(cycleSub.length+1)))
+            tmps <- .loess_stl3(y=cycleSub, span=s.window, degree=s.degree, m=cs.ev, weights=w[cycleSubIndices == i], blend=s.blend, jump=s.jump,  at=c(0:(cycleSub.length+1)))
            C[c(cs1, cycleSubIndices, cs2)==i] <- tmps
            # approx(x=cs.ev, y=tmps, xout=c(0:(cycleSub.length+1)))$y
          }
@@ -239,7 +259,7 @@ for(o_iter in 1:outer) {
 
       l.ev <- seq(1, n, by=l.jump)
       if(tail(l.ev, 1) != n) l.ev <- c(l.ev, n)
-      L <- .loess_stl2(y=ma3, span=l.window, degree=l.degree, m=l.ev, weights=w, y_idx=y_idx, noNA=noNA, blend=l.blend, jump=l.jump, at=c(1:n))
+      L <- .loess_stl3(y=ma3, span=l.window, degree=l.degree, m=l.ev, weights=w, y_idx=y_idx, noNA=noNA, blend=l.blend, jump=l.jump, at=c(1:n))
       
 		# L <- predict(loess(ma3 ~ c(1:n), degree=l.degree, span=l.window/n, family=family), newdata=c(1:n))
       
@@ -247,16 +267,16 @@ for(o_iter in 1:outer) {
       seasonal <- C[st:nd] - L
 
       # Step 5: Deseasonalize
-      D <- Y - seasonal
+      D <- Y - seasonal - fc.first - fc.second
 
       # Step 6: Trend Smoothing
 
       t.ev <- seq(1, n, by=t.jump)
       if(tail(t.ev, 1) != n) t.ev <- c(t.ev, n)
-      trend <- .loess_stl2(y=D, span=t.window, degree=t.degree, m=t.ev, weights=w, y_idx=y_idx, noNA=noNA, blend=t.blend, jump=t.jump, at=c(1:n))
+      trend <- .loess_stl3(y=D, span=t.window, degree=t.degree, m=t.ev, weights=w, y_idx=y_idx, noNA=noNA, blend=t.blend, jump=t.jump, at=c(1:n))
       # if(blend$t) {
       #    # TODO: validate blend parameters
-      #    trend0 <- .loess_stl2(y=D, span=t.window, degree=t.degree, m=t.ev, weights=w, y_idx=y_idx, noNA=noNA)   
+      #    trend0 <- .loess_stl3(y=D, span=t.window, degree=t.degree, m=t.ev, weights=w, y_idx=y_idx, noNA=noNA)   
       # }
       
       # trend <- predict(loess(D ~ c(1:length(D)), degree=t.degree, span=t.window/length(D), family=family), newdata=c(1:length(D)))
@@ -314,7 +334,7 @@ for(o_iter in 1:outer) {
       for(ii in 1:fc.number) {      
          fc.ev <- seq(1, n, by=fc.jump[ii])
          if(tail(fc.ev, 1) != n) fc.ev <- c(fc.ev, n)
-         tmp <- .loess_stl2(y=Y - seasonal - fc.cumulative, span=fc.window[ii], degree=fc.degree[ii], m=fc.ev, weights=w, y_idx=y_idx, noNA=noNA, blend=fc.blend[ii], jump=fc.jump[ii], at=c(1:n))
+         tmp <- .loess_stl3(y=Y - seasonal - fc.cumulative, span=fc.window[ii], degree=fc.degree[ii], m=fc.ev, weights=w, y_idx=y_idx, noNA=noNA, blend=fc.blend[ii], jump=fc.jump[ii], at=c(1:n))
          
          fc.cumulative <- fc.cumulative + tmp
          fc.res[,ii] <- tmp
@@ -335,7 +355,7 @@ for(o_iter in 1:outer) {
    a <- data.frame(raw=Y, seasonal=seasonal, trend=trend, remainder=R, weights=w, sub.labels=sub.labels)
    pars <- list(deg=data.frame(s.degree=s.degree, t.degree=t.degree, l.degree=l.degree), win=data.frame(s.window=s.window, t.window=t.window, l.window=l.window), blend=data.frame(s.blend=s.blend, t.blend=t.blend, l.blend=l.blend), jump=data.frame(s.jump=s.jump, t.jump=t.jump, l.jump=l.jump), fc.number=fc.number, fc=fc, n.p=n.p, inner=inner, outer=outer, periodic=periodic)
    b <- list(data=a, fc=fc.res, pars=pars, time=t, n=nrow(a), details=dtls)
-   class(b) <- "stl2"
+   class(b) <- "stl3"
    b
 }
 

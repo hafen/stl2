@@ -6,7 +6,7 @@ getraw <- function(object) {
    object$data$raw
 }
 
-remainder.stl2 <- function(object) {
+remainder.stl3 <- function(object) {
    if(object$pars$fc.number==0) {
       object$data$remainder      
    } else {
@@ -14,7 +14,7 @@ remainder.stl2 <- function(object) {
    }
 }
 
-fitted.stl2 <- function(object, ...) {
+fitted.stl3 <- function(object, ...) {
    if(object$pars$fc.number==0) {
       object$data$seasonal + object$data$trend
    } else {
@@ -22,7 +22,7 @@ fitted.stl2 <- function(object, ...) {
    }
 }
 
-predict.stl2 <- function(object, ...) {
+predict.stl3 <- function(object, ...) {
    if(object$pars$fc.number==0) {
       object$data$seasonal + object$data$trend
    } else {
@@ -30,18 +30,18 @@ predict.stl2 <- function(object, ...) {
    }
 }
 
-seasonal.stl2 <- function(object) {
+seasonal.stl3 <- function(object) {
    object$data$seasonal
 }
 
-trend.stl2 <- function(object) {
+trend.stl3 <- function(object) {
    object$data$trend
 }
 
 # get frequency components:
 fc <- function(object, fcnum=1) {
-   if(! "stl2" %in% class(object))
-      stop("object not of class stl2")
+   if(! "stl3" %in% class(object))
+      stop("object not of class stl3")
    
    if(is.null(object$fc))
       stop("there are no post-trend frequency components")
@@ -53,7 +53,7 @@ fc <- function(object, fcnum=1) {
 }
 
 # setGeneric("time")
-time.stl2 <- function(x, ...) {
+time.stl3 <- function(x, ...) {
    if(length(x$t) == x$n) {
       x$t
    } else {

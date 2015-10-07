@@ -1,6 +1,6 @@
 \name{plot.trend}
 \alias{plot.trend}
-\title{Trend Diagnostic Plot for an stl2 Object}
+\title{Trend Diagnostic Plot for an stl3 Object}
 \description{
 Plots the trend+remainder with the trend component overlaid, and the 
 remainder component in a separate panel.
@@ -13,7 +13,7 @@ plot.trend(x, xlab = "Time", ylab = "Trend", span = 0.3,
    strip.left = TRUE, as.table = TRUE, ...)
 }
 \arguments{
-  \item{x}{object of class \code{"stl2"}.}
+  \item{x}{object of class \code{"stl3"}.}
   \item{xlab, ylab, span, type, scales, lwd, col, layout}{parameters to be passed to 
   xyplot.}
   \item{between, strip, strip.left, as.table, ...}{parameters to be passed to 
@@ -31,7 +31,7 @@ R. B. Cleveland, W. S. Cleveland, J. E.  McRae, and I. Terpenning (1990) STL:  A
 % \note{ ~~further notes~~ 
 %  ~Make other sections like Warning with \section{Warning }{....} ~
 % }
-\seealso{\code{\link{stl2}}}
+\seealso{\code{\link{stl3}}}
 % \examples{
 % ##---- Should be DIRECTLY executable !! ----
 % ##-- ==>  Define data, use random,

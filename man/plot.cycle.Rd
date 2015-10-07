@@ -1,6 +1,6 @@
 \name{plot.cycle}
 \alias{plot.cycle}
-\title{Cycle-Subseries Plot for an stl2 Object}
+\title{Cycle-Subseries Plot for an stl3 Object}
 \description{
 Plots the seasonal component by cycle-subseries, with lines emanating 
 from the midmean of the values within each cycle-subseries.
@@ -13,7 +13,7 @@ plot.cycle(x, layout=c(x$pars$n.p, 1), col="#0080ff",
    }, ...)
 }
 \arguments{
-   \item{x}{object of class \code{"stl2"}.}
+   \item{x}{object of class \code{"stl3"}.}
    \item{layout, col, xlab, ylab, panel, ...}{parameters to be passed to \code{xyplot()}.}
 }
 % \details{
@@ -28,7 +28,7 @@ R. B. Cleveland, W. S. Cleveland, J. E.  McRae, and I. Terpenning (1990) STL:  A
 % \note{ ~~further notes~~ 
 %  ~Make other sections like Warning with \section{Warning }{....} ~
 % }
-\seealso{\code{\link{stl2}}}
+\seealso{\code{\link{stl3}}}
 % \examples{
 % ##---- Should be DIRECTLY executable !! ----
 % ##-- ==>  Define data, use random,

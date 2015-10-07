@@ -9,7 +9,7 @@ plot.rembycycle(x, col = "black", locol = "red", lolwd = 2,
    xlab = "Time", ylab = "Remainder", ...)
 }
 \arguments{
-   \item{x}{object of class \code{"stl2"}.}
+   \item{x}{object of class \code{"stl3"}.}
    \item{col, locol, lolwd, xlab, ylab, ...}{parameters to be passed to \code{xyplot()}. \code{locol} and \code{lolwd} are the line color and width for the loess line.}
 }
 % \details{

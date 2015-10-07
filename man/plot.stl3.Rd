@@ -1,11 +1,11 @@
-\name{plot.stl2}
-\alias{plot.stl2}
+\name{plot.stl3}
+\alias{plot.stl3}
 \title{Lattice plot of the raw, seasonal, trend, and remainder components}
 \description{
 Lattice plot of the raw, seasonal, trend, and remainder components.  If post-trend smoothing was done, these components will be plotted instead of the trend component.
 }
 \usage{
-\method{plot}{stl2}(x, scales = list(y = list(relation = "sliced")), 
+\method{plot}{stl3}(x, scales = list(y = list(relation = "sliced")), 
    type = "l", as.table = TRUE, strip = FALSE, strip.left = TRUE, 
    between = list(y = 0.5), layout = NULL, ...)
 }
@@ -27,7 +27,7 @@ R. B. Cleveland, W. S. Cleveland, J. E.  McRae, and I. Terpenning (1990) STL:  A
 % \note{ ~~further notes~~ 
 %  ~Make other sections like Warning with \section{Warning }{\dots.} ~
 % }
-\seealso{\code{\link{stl2}}}
+\seealso{\code{\link{stl3}}}
 % \examples{
 % ##---- Should be DIRECTLY executable !! ----
 % ##-- ==>  Define data, use random,
